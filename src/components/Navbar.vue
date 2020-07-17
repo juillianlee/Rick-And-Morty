@@ -12,6 +12,7 @@ export default {};
 <style lang="scss">
 .navbar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 
   li {

@@ -4,67 +4,53 @@
       <Navbar />
       <Searchbar />
       <div class="cards">
-        <Card>
-          <CardImage v-bind:src="'https://rickandmortyapi.com/api/character/avatar/1.jpeg'" />
-          <CardBody>
-            <div class="title">Rick Sanchez</div>
-            <CardListItem v-bind:items="items" />
-          </CardBody>
-        </Card>
+        <Character
+          v-bind:character="character"
+          v-for="character in characters"
+          :key="character.id"
+        />
       </div>
     </div>
-    <div class="rick-morty-content">
-      <img src="./assets/bg-rick-and-morty.png" />
-      <h1>RICK AND MORTY</h1>
-      <p>Acompanhe malucas viagens no tempo-espaço e por universos paralelos com Rick, um cientista com problemas com a bebida, e seu neto Morty, um adolescente não tão brilhante quanto o avô.</p>
-    </div>
+    <Banner />
   </div>
 </template>
 
 <script>
 import './assets/scss/style.scss';
-import Card from './components/Card';
-import CardImage from './components/CardImage';
-import CardBody from './components/CardBody';
-import CardListItem from './components/CardListItem';
+import Character from './components/Character';
 import Navbar from './components/Navbar';
 import Searchbar from './components/Searchbar';
+import Banner from './components/Banner';
+
+/**
+Desenvolver um SPA utilizando VueJS e Apollo que usa como backend a API pública em GraphQL que contém dados sobre os
+personagens e episódios do desenho Rick and Morty.
+O SPA deve conter as seguintes funcionalidades:
+Personagens
+Lista de personagens com busca e ordenação
+Informação do personagem contendo a localização de origem e os episódios nos quais participou
+Episódios
+Lista de episódios com busca e ordenação
+Informação do episódio, contendo o nome, a data de exibição e os personagens que participaram
+O projeto deve conter um Storybook (ou ferramenta equivalente) que expõe os componentes reutilizáveis utilizados durante o desenvolvimento.
+O projeto deve conter testes automatizados.
+ */
 
 export default {
   name: 'App',
   components: {
-    Card,
-    CardImage,
-    CardBody,
+    Character,
     Navbar,
     Searchbar,
-    CardListItem
+    Banner
   },
-  data() {
-    return {
-      items: [
-        {
-          label: 'Especie',
-          text: 'Human'
-        },
-        {
-          label: 'Genero',
-          text: 'Male'
-        },
-        {
-          label: 'Origem',
-          text: 'Earth (C-137)'
-        },
-        {
-          label: 'Status',
-          text: 'Alive'
-        },
-        {
-          label: 'Episódios',
-          text: '34'
-        }
-      ]
-    };
+  mounted() {
+    this.$store.dispatch('getCharacters');
+  },
+  computed: {
+    characters() {
+      return this.$store.state.characters;
+    }
   }
 };
 </script>
@@ -78,6 +64,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   padding-top: 20px;
+  padding: 20px;
 
   .main,
   .rick-morty-content {
@@ -118,11 +105,37 @@ export default {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+
       .card {
+        &:nth-child(odd) {
+          margin-right: 10px;
+        }
         width: 259px;
         margin-bottom: 10px;
         .card-body {
           margin-left: 5px;
+
+          .list-detail {
+            margin-top: 2px;
+          }
+        }
+      }
+
+      @media (min-width: 694px) {
+        .card {
+          &:nth-child(odd) {
+            margin-right: 10px;
+          }
+        }
+      }
+
+      @media (max-width: 1160px) {
+        justify-content: center;
+        .card {
+          flex-basis: 100%;
+          &:nth-child(odd) {
+            margin-right: 0px;
+          }
         }
       }
     }

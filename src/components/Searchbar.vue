@@ -1,6 +1,6 @@
 <template>
   <div class="searchbar">
-    <input type="text" placeholder="Digite para pesquisar" />
+    <input @keyup="search" type="text" placeholder="Digite para pesquisar" />
     <div class="select-filter-content">
       Ordenar por:
       <select>
@@ -13,7 +13,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    search(event) {
+      this.$store.dispatch('searchCharacters', {
+        text: event.target.value
+      });
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
